@@ -55,8 +55,8 @@
          background-image: url('../images/bg.png');
          border-bottom: 1px solid rgb(44, 44, 44);
 
-         #objectives, #quests {
-            width: 50%;
+         #objectives, #quests, #link {
+            width: 40%;
             text-align: center;
             padding: 5px 7px;
             padding-bottom: 6px;
@@ -65,7 +65,19 @@
             transition: 0.2s;
          }
          
-         #objectives { border-right: 1px solid rgb(46, 46, 46); }
+         #objectives {
+            border-right: 1px solid rgb(46, 46, 46);
+         }
+
+         #link {
+            width: 20%;
+            background: rgba(60, 114, 185, 0.5);
+         }
+
+         #link:hover {
+            background: rgba(93, 144, 211, 0.5);
+            text-decoration: underline;
+         }
 
          .current {
             background: rgba(78, 255, 246, 0.089);

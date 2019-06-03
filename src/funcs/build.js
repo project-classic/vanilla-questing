@@ -1,150 +1,139 @@
-import axios from 'axios';
-
-// ALLIANCE ROUTES
+// ALLIANCE
 import human from '../routes/alliance/human.json';
 import gnorf from '../routes/alliance/gnorf.json';
 import nelf from '../routes/alliance/nelf.json';
 import alliance_shared from '../routes/alliance/shared.json';
 import alliance_quests from '../routes/alliance/quests.json';
 
-// HORDE ROUTES
+// HORDE
 import trorc from '../routes/horde/trorc.json';
 import tauren from '../routes/horde/tauren.json';
 import undead from '../routes/horde/undead.json';
 import horde_shared from '../routes/horde/shared.json';
 import horde_quests from '../routes/horde/quests.json';
 
-// ALLIANCE RACES
-const alliance = new Map([
-   ['human', 'human'],
-   ['dwarf', 'gnorf'],
-   ['gnome', 'gnorf'],
-   ['nelf', 'nelf'],
-]);
+// DEVELOPMENT
+import dev_route from '../routes/dev/route.json';
+import dev_quests from '../routes/dev/quests.json';
 
-// HORDE RACES
-const horde = new Map([
-   ['orc', 'trorc'],
-   ['troll', 'trorc'],
-   ['tauren', 'tauren'],
-   ['undead', 'undead'],
-]);
+// RACE SPECIFIC STARTERS
+const races = {
+   alliance: new Map([
+      ['human', human],
+      ['dwarf', gnorf],
+      ['gnome', gnorf],
+      ['nelf', nelf]
+   ]),
+   horde: new Map([
+      ['orc', trorc],
+      ['troll', trorc],
+      ['tauren', tauren],
+      ['undead', undead],
+   ])
+}
 
-// ASSEMBLE JSON DATA
+// CONSTRUCT REQUESTED ROUTE
 function route(race) {
 
-   // CONTAINER
-   let promises = [];
+   // PLACEHOLDER
+   let content = {};
 
-   // ALLIANCE BLOCKS
-   if (alliance.has(race)) {
+   // GENERATE ALLIANCE BUILD
+   if (races.alliance.has(race)) {
+      content = {
+         quests: alliance_quests,
+         route: [
+            ...races.alliance.get(race).path,
+            ...alliance_shared.path
+         ]
+      }
 
-      // FIND RELEVANT FILES
-      promises = [
-         axios.get('./routes/alliance/quests.json'),
-         axios.get('./routes/alliance/' + alliance.get(race) + '.json'),
-         axios.get('./routes/alliance/shared.json'),
-      ];
-
-   // HORDE BLOCKS
-   } else if (horde.has(race)) {
-
-      // FIND RELEVANT FILES
-      promises = [
-         axios.get('./routes/horde/quests.json'),
-         axios.get('./routes/horde/' + horde.get(race) + '.json'),
-         axios.get('./routes/horde/shared.json'),
-      ];
+   // GENERATE HORDE BUILD
+   } else if (races.horde.has(race)) {
+      content = {
+         quests: horde_quests,
+         route: [
+            ...races.horde.get(race).path,
+            ...horde_shared.path
+         ]
+      }
    }
 
-   // WAIT FOR THE PROMISES TO RESOLVE
-   return Promise.all(promises).then(response => {
-
-      // CREATE THE DATA OBJECT
-      const data = {
-         quests: response[0].data,
-         route: [
-            ...response[1].data.path,
-            ...response[2].data.path
-         ],
-         hearthstones: hearthstones([
-            ...response[1].data.path,
-            ...response[2].data.path
-         ])
-      };
-
-      return data;
-   });
+   // CONSTRUCT & RETURN DATA OBJECT
+   return {
+      quests: content.quests,
+      route: content.route,
+      hearthstones: hearthstones(content.route),
+      race: race
+   }
 }
 
 // RANDOM ROUTE
 function random() {
 
    // PICK A RACE RANDOMLY
-   const races = [ ...alliance.keys(), ...horde.keys() ];
-   const randomize = Math.floor((Math.random() * races.length) + 0);
+   const all = [ ...races.alliance.keys(), ...races.horde.keys() ];
+   const race = Math.floor((Math.random() * all.length) + 0);
 
-   // BUILD ROUTE & RENDER IT
-   return route(races[randomize]).then(data => {
-      return {
-         data: data,
-         current: Math.floor((Math.random() * data.route.length - 1) + 1)
-      }
-   })
+   // CONSTRUCT BUILD
+   const build = route(all[race]);
+
+   // RETURN FINALIZED BUILD
+   return {
+      data: build,
+      current: Math.floor((Math.random() * build.route.length - 1) + 1)
+   }
 }
 
 // SPECIFIC ROUTE
-function specific({ icon, block }) {
-   return route(icon).then(data => {
-      return {
-         data: data,
-         current: block,
-      };
-   });
+function specific({ race, block }) {
+
+   // DEFAULT TO RANDOM ROUTE
+   let response = random();
+   
+   // MAKE SURE THE RACE EXISTS
+   if (exists(race)) {
+
+      // FETCH BUILD
+      const build = route(race);
+
+      // IF THE REQUESTED BLOCK IS WITHIN LIMITS
+      if (block <= build.route.length) {
+
+         // UPDATE RESPONSE WITH REQUESTED ROUTE
+         response = {
+            data: build,
+            current: parseInt(block)
+         }
+      }
+   }
+
+   // FINALLY RETURN
+   return response;
 }
 
 // IMPORTED DATASET
-function custom(url, faction) {
-
-   // QUEST & ROUTE PROMISES
-   const promises = [
-      axios.get('./routes/' + faction + '/quests.json'),
-      axios.get(url)
-   ];
-
-   // WAIT FOR THE PROMISES TO RESOLVE
-   return Promise.all(promises).then(data => {
-      return {
-         data: {
-            quests: data[0].data,
-            route: data[1].data.path,
-            hearthstones: hearthstones(data[1].data.path)
-         },
-         current: 0
-      }
-   })
+function custom({ build, faction }) {
+   return {
+      data: {
+         quests: faction === 'alliance' ? alliance_quests : horde_quests,
+         route: build.path,
+         hearthstones: hearthstones(build.path)
+      },
+      current: 0
+   }
 }
 
 // DEVELOPMENT DATASET
 function dev() {
-
-   // QUEST & ROUTE PROMISES
-   const promises = [
-      axios.get('./routes/dev/quests.json'),
-      axios.get('./routes/dev/route.json')
-   ];
-
-   // WAIT FOR THE PROMISES TO RESOLVE
-   return Promise.all(promises).then(data => {
-      return {
-         data: {
-            quests: data[0].data,
-            route: data[1].data.path,
-            hearthstones: hearthstones(data[1].data.path)
-         },
-         current: 0
-      }
-   })
+   return {
+      data: {
+         quests: dev_quests,
+         route: dev_route.path,
+         hearthstones: hearthstones(dev_route.path)
+      },
+      current: 0
+   }
 }
 
 // FIND HEARTHSTONE BLOCK INDEXES
@@ -174,13 +163,13 @@ function hearthstones(route) {
 function exists(race) {
 
    // MAKE UNITED MAP
-   const factions = new Map([
-      ...alliance,
-      ...horde
+   const keys = new Map([
+      ...races.alliance,
+      ...races.horde
    ]);
 
    // PERFORM & RETURN CHECK
-   return factions.has(race.toLowerCase())
+   return keys.has(race.toLowerCase())
 }
 
 export {

@@ -11,7 +11,7 @@ function Manifesto() { return (
       <div id={ 'inner' }>
          <Primary header={ 'Introduction' } id={ 'intro' }>
             <Paragraph>
-               Greetings! This is a web-based quest helper for Vanilla/Classic World of Warcraft. The application takes a <a href='https://github.com/wickstjo/vanilla-questing/blob/master/public/routes/alliance/shared.json'>handwritten JSON file</a> (that contains a route) and parses it to an easy to follow guide with dynamically rendered maps, directions and objective/quest logs.
+               Greetings! This is a web-based quest helper for Vanilla/Classic World of Warcraft. The application takes a <a href='https://github.com/wickstjo/vanilla-questing/blob/master/src/routes/alliance/human.json' target="_blank" rel="noopener noreferrer">handwritten JSON file</a> (that contains a route) and parses it to an easy to follow guide with dynamically rendered maps, directions and objective/quest logs.
             </Paragraph>
             <Paragraph>
                It was originally intended for quest routing in mind, but can be used for anything map and coordinate related and uses the same metrics that the game does. The route files were designed with flexibility and precision in mind so even large sweeping changes are easy to implement while machine auditing makes sure that every quest has an appropriate start and conclusion.
@@ -53,11 +53,11 @@ function Manifesto() { return (
          </Primary>
          <Primary header={ `Features` } id={ `features` }>
             <Paragraph>
-               The entire application is written in React and hosted via Github pages. The route files are very self explanatory and you don't need to be a programmer to write one yourself. Everything is open-source and viewable from the <a href="https://github.com/wickstjo/vanilla-questing">github repository</a>. There are no backend components or cookies being used.
+               The entire application is written in React and hosted via Github pages. The route files are very self explanatory and you don't need to be a programmer to write one yourself. Everything is open-source and viewable from the <a href="https://github.com/wickstjo/vanilla-questing" target="_blank" rel="noopener noreferrer">github repository</a>. There are no backend components or cookies being used.
             </Paragraph>
             <Secondary header={ `Saving Your Progress` } id={ `storage` }>
                <Paragraph>
-                  There is no traditional backend component like a database for storage. Everything runs locally and your profiles are saved to your <a href="https://blog.logrocket.com/the-complete-guide-to-using-localstorage-in-javascript-apps-ba44edb53a36">browsers localstorage</a>. The string is only a few kilobytes in size and snapshots your character progress, which the application then parses, uses and updates. Only you have access to this information.
+                  There is no traditional backend component like a database for storage. Everything runs locally and your profiles are saved to your <a href="https://blog.logrocket.com/the-complete-guide-to-using-localstorage-in-javascript-apps-ba44edb53a36" target="_blank" rel="noopener noreferrer">browsers localstorage</a>. The string is only a few kilobytes in size and snapshots your character progress, which the application then parses, uses and updates. Only you have access to this information.
                </Paragraph>
             </Secondary>
             <Secondary header={ `Smaller Devices` } id={ `smaller-devices` }>

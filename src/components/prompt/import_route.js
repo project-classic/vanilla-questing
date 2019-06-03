@@ -2,6 +2,8 @@ import React, { useState, useContext } from 'react';
 import { Context } from "../../context";
 import { custom } from '../../funcs/build';
 
+import axios from 'axios';
+
 function ImportRoute() {
 
    // GLOBAL CONTEXT
@@ -24,42 +26,74 @@ function ImportRoute() {
 
    // PARSE SELECTED FILE
    const parse_file = (event) => {
+      event.persist();
 
       // FIND THE FILE
       var content = event.target.files[0];
 
-      // CHECK THAT A PROPER FILE WAS SELECTED
-      if (content !== undefined && content.type === 'application/json') {
+      // INSTANTIATE THE READER
+      var reader = new FileReader();
 
-         // FETCH THE READER
-         var reader = new FileReader();
+      // GENERATE A FETCHABLE URL, THEM FETCH IT
+      reader.onload = () => {
+         axios.get(reader.result).then(response => {
 
-         // GENERATE A FETCHABLE URL
-         reader.onload = () => {
+            // CHECK CONTENT TYPE
+            const type = typeof response.data;
 
-            // FETCH THE CONTENT & DEPLOY TO PARENT
-            const file = reader.result;
-            const faction = local.alliance ? 'alliance' : 'horde';
-
-            // GENERATE CUSTOM BUILD
-            custom(file, faction).then(response => {
+            // IF ITS A PROPERLY FORMATTED OBJECT
+            if (type !== 'string' && Object.keys(response.data).length) {
 
                // SET BUILD
                dispatch({
                   type: 'load',
-                  payload: response
+                  payload: custom({
+                     build: response.data,
+                     faction: local.alliance ? 'alliance' : 'horde'
+                  })
+               })
+
+               // SET LOADED PROFILE TO NULL
+               dispatch({
+                  type: 'loaded',
+                  payload: null
+               })
+
+               // SHOW MESSAGE
+               dispatch({
+                  type: 'show-message',
+                  payload: {
+                     type: 'good',
+                     value: 'ROUTE IMPORTED SUCCESSFULLY'
+                  }
                })
 
                // HIDE PROMPT
                dispatch({ type: 'hide-prompt' });
-            })
-         };
 
-         // TRIGGER THE READER
-         reader.readAsDataURL(content);
+            // OTHERWISE, LOADING NOTHING & SHOW ERROR MESSAGE
+            } else {
+               
+               // SHOW MESSAGE
+               dispatch({
+                  type: 'show-message',
+                  payload: {
+                     type: 'bad',
+                     value: 'ROUTE IMPORT FAILED DUE TO TYPOS'
+                  }
+               })
 
-      // OTHERWISE, LOG ERROR
-      } else { console.log('Bad file-type!'); }
+               // HIDE PROMPT
+               dispatch({ type: 'hide-prompt' });
+            }
+
+            // IRREGARDLESS, CLEAR THE INPUT FIELD
+            event.target.value = null;
+         })
+      }
+
+      // TRIGGER THE READER
+      reader.readAsDataURL(content);
    }
 
    // TOGGLE FACTION

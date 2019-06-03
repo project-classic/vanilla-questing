@@ -1,3 +1,5 @@
+import { sleep } from "./misc";
+
 // STORAGE KEY
 const key = 'profiles';
 
@@ -5,28 +7,37 @@ const key = 'profiles';
 function check() {
    return new Promise((resolve, reject) => {
 
-      // CONVERT OLD PROFILES
-      if (localStorage.getItem('vanilla-questing') !== null) {
+      // FETCH STORAGE & OBJECTIFY
+      let storage = JSON.parse(localStorage.getItem(key));
 
-         // CONVERT & SET
-         localStorage.setItem(key, JSON.stringify({
-            profiles: convert(localStorage.getItem('vanilla-questing'))
-         }));
-         
-         // DELETE OLD KEY
-         localStorage.removeItem('vanilla-questing');
-      }
+      // LEGACY KEYS
+      const legacy = ['vanilla-questing', 'horde', 'dev'];
 
-      // NUKE LEGACY STUFF ENTIRELY
-      if (localStorage.getItem('horde') !== null) { localStorage.removeItem('horde'); }
+      // REMOVE LEGACY KEYS IF THEY EXIST
+      legacy.forEach(item => {
+         if (localStorage.getItem(item) !== null) {
+            localStorage.removeItem(item);
+         }
+      });
 
-      // IF STORAGE IS EMPTY, FILL IT WITH BRACKETS
+      // IF NO CURRENT STORAGE KEY EXISTS, CREATE IT
       if (localStorage.getItem(key) === null) {
-         localStorage.setItem(key, '{ "profiles": [] }');
-      }
+         
+         // OVERWRITE STORAGE VAR
+         storage = { profiles: [] }
 
-      // THEN RESOLVE
-      resolve();
+         // SET STORAGE
+         localStorage.setItem(key, JSON.stringify(storage));
+      
+      // IF IT DOES, CHECK THAT ITS CORRECTLY WRITTEN
+      } else { storage = convert(storage); }
+
+      // FINALLY RESOLVE
+
+      // GIVE THE PAGE A SECOND TO STABILIZE DIMENSIONS, THEN RESOLVE
+      sleep(1000).then(() => {
+         resolve(new Map(storage.profiles));
+      });
    })
 }
 
@@ -59,26 +70,27 @@ function change(state, block) {
 }
 
 // CONVERT OLD STORAGE OBJECT
-function convert(old) {
+function convert(storage) {
+   let update = false;
 
-   // OBJECTIFY
-   const foo = JSON.parse(old);
+   storage.profiles.forEach(profile => {
+      if (profile[1].icon !== undefined) {
 
-   // FETCH KEYS & DECLARE PROFILES
-   const keys = Object.keys(foo);
-   let profiles = [];
+         // TRANSFORM 'ICON' KEY TO 'RACE'
+         profile[1].race = profile[1].icon;
+         delete profile[1].icon;
 
-   // LOOP THROUGH
-   keys.forEach(key => {
+         // MARK TO UPDATE STORAGE
+         update = true;
+      }
+   });
 
-      // PUSH EACH NAME/DETAILS BLOCK
-      profiles.push([key, {
-         icon: foo[key].race,
-         block: foo[key].block
-      }]);
-   })
+   // UPDATE STORAGE IF NECESSARY
+   if (update) {
+      localStorage.setItem(key, JSON.stringify(storage));
+   }
 
-   return profiles;
+   return storage;
 }
 
 // EXPORT PROFILE OBJECT

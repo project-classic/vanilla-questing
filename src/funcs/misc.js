@@ -109,6 +109,14 @@ function preload_bgs(dispatch) {
       // LOG SUCCESS & HIDE PROMPT
       console.log('Preload Complete!');
       dispatch({ type: 'hide-prompt' })
+
+      dispatch({
+         type: 'show-message',
+         payload: {
+            type: 'good',
+            value: 'backgrounds preloaded'
+         }
+      })
    });
 }
 

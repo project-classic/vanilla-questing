@@ -1,10 +1,12 @@
 import React, { useState, useContext } from 'react';
+import EventListener from 'react-event-listener';
+
 import { Context } from "../../context";
 
 function ImportProfiles() {
 
    // GLOBAL STATE
-   const { dispatch } = useContext(Context);
+   const { state, dispatch } = useContext(Context);
 
    // LOCAL STATE
    const [local, set_local] = useState({
@@ -58,6 +60,13 @@ function ImportProfiles() {
             type: 'loaded',
             payload: null
          })
+         dispatch({
+            type: 'show-message',
+            payload: {
+               type: 'good',
+               value: 'imported profiles successfully'
+            }
+         })
          set_local({
             value: '',
             button: 'bad'
@@ -65,22 +74,33 @@ function ImportProfiles() {
       }
    }
 
+   // ENTER KEY LISTENER
+   const key_listener = (event) => {
+      if (event.key.toLowerCase() === 'enter' && state.prompt.visible) {
+         submit();
+      }
+   }
+
    return (
       <>
          <div id={ 'header' }>Import Profiles</div>
          <div id={ 'import' }>
-               <textarea
-                  id={ 'route' }
-                  type={ 'file' }
-                  onChange={ audit }
-                  value={ local.value }
-               />
-               <input
-                  type={ 'submit' }
-                  id={ local.button }
-                  value={ 'Replace' }
-                  onClick={ submit }
-               />
+            <EventListener
+               target={ 'window' }
+               onKeyDown={ key_listener }
+            />
+            <textarea
+               id={ 'route' }
+               type={ 'file' }
+               onChange={ audit }
+               value={ local.value }
+            />
+            <input
+               type={ 'submit' }
+               id={ local.button }
+               value={ 'Replace' }
+               onClick={ submit }
+            />
          </div>
       </>
    )

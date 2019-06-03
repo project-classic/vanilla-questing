@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 
 function Sub({ header, icon, func, link }) {
    if (link === undefined) {
@@ -28,12 +28,12 @@ function Func({ header, icon, func }) { return (
 
 // PLAIN OLD LINK
 function Plain({ header, icon, link }) { return (
-   <Link to={ link }>
+   <HashLink to={ link }>
       <div className="item">
          <div className='icon' id={ icon } />
          <div className='header'>{ header }</div>
       </div>
-   </Link>
+   </HashLink>
 )}
 
 export default Sub;

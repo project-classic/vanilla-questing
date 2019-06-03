@@ -46,7 +46,7 @@ function Create() {
       // IF ERRORS WERE FOUND, SHOW THEM & TURN BUTTON RED
       if (errors.length !== 0) {
          set_local({
-            ...local,
+            name: input,
             button: 'bad',
             errors: errors
          })
@@ -59,37 +59,49 @@ function Create() {
          
          // GENERATE DETAILS
          const details = {
-            icon: state.selected_race,
+            race: state.selected_race,
             block: 0
          }
 
          // ADD PROFILE TO HASHMAP
          state.profiles.set(local.name, details);
 
-         // GENERATE BUILD
-         specific(details).then((response) => {
-
-            // SET BUILD
-            dispatch({
-               type: 'load',
-               payload: response
-            })
-
-            // SET 'LOADED' PROFILE
-            dispatch({
-               type: 'loaded',
-               payload: local.name
-            })
-
-            // UPDATE STORAGE
-            dispatch({
-               type: 'update_profiles',
-               payload: state.profiles
-            });
-
-            // HIDE PROMPT
-            dispatch({ type: 'hide-prompt' });
+         // LOAD REQUESTED BUILD
+         dispatch({
+            type: 'load',
+            payload: specific(details)
          })
+
+         // SET 'LOADED' PROFILE
+         dispatch({
+            type: 'loaded',
+            payload: local.name
+         })
+
+         // UPDATE STORAGE
+         dispatch({
+            type: 'update_profiles',
+            payload: state.profiles
+         });
+
+         // RESET LOCAL STATE
+         set_local({
+            name: '',
+            button: 'bad',
+            errors: []
+         })
+
+         // SHOW MESSAGE
+         dispatch({
+            type: 'show-message',
+            payload: {
+               type: 'good',
+               value: 'profile "' + local.name + '" created'
+            }
+         })
+
+         // HIDE PROMPT
+         dispatch({ type: 'hide-prompt' });
       }
    }
 
@@ -114,6 +126,7 @@ function Create() {
                type={ 'text' }
                placeholder={ 'Enter Profile Name' }
                onChange={ audit }
+               value={ local.name }
             />
             <input
                id={ local.button }

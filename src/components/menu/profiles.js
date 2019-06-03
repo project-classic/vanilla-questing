@@ -26,23 +26,30 @@ function Profiles({ hide }) {
 
    // OPEN PROFILE
    const open = (header, details) => {
-      specific(details).then(response => {
          
-         // LOAD ROUTE
-         dispatch({
-            type: 'load',
-            payload: response
-         })
+      // LOAD ROUTE
+      dispatch({
+         type: 'load',
+         payload: specific(details)
+      })
 
-         // MARK PROFILE AS LOADED
-         dispatch({
-            type: 'loaded',
-            payload: header
-         })
+      // MARK PROFILE AS LOADED
+      dispatch({
+         type: 'loaded',
+         payload: header
+      })
 
-         // HIDE SUBMENU
-         hide();
-      });
+      // SHOW MESSAGE
+      dispatch({
+         type: 'show-message',
+         payload: {
+            type: 'good',
+            value: 'profile "' + header + '" loaded'
+         }
+      })
+
+      // HIDE SUBMENU
+      hide();
    }
 
    // IF PROFILES HAVE LOADED
@@ -69,34 +76,31 @@ function Profiles({ hide }) {
 
 // SINGLE PROFILE
 function Profile({ header, details, open, remove, state }) {
-   if (state.loaded === header) {
-      return (
-         <div className={ 'item' } id={ 'loaded' }>
-            <div className={ 'icon' } id={ details.icon } />
-            <div className={ 'header' }>
-               { header }
-            </div>
+   if (state.loaded === header) { return (
+      <div className={ 'item' } id={ 'loaded' }>
+         <div className={ 'icon' } id={ details.race } />
+         <div className={ 'header' }>
+            { header }
          </div>
-      )
-   } else {
-      return (
-         <div className={ 'item' }>
-            <div
-               className={ 'icon' }
-               id={ details.icon }
-               onClick={() => { open(header, details) }}
-            />
-            <div className={ 'header' } onClick={() => { open(header, details) }}>
-               { header }
-            </div>
-            <div
-               className={ 'action' }
-               id={ 'remove' }
-               onClick={() => { remove(header) }}
-            />
+         <div className={ 'loaded' }>Loaded</div>
+      </div>
+   )} else { return (
+      <div className={ 'item' }>
+         <div
+            className={ 'icon' }
+            id={ details.race }
+            onClick={() => { open(header, details) }}
+         />
+         <div className={ 'header' } onClick={() => { open(header, details) }}>
+            { header }
          </div>
-      )
-   }
+         <div
+            className={ 'action' }
+            id={ 'remove' }
+            onClick={() => { remove(header) }}
+         />
+      </div>
+   )}
 }
 
 export default Profiles;

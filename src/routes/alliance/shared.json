@@ -4460,7 +4460,7 @@
             {
                "coords": { "x": 27, "y": 77 },
                "header": "booty bay",
-               "ends": ["the haunted isle"],
+               "completed": ["the haunted isle"],
                "starts": ["supplies to private thorsen", "investigate the camp", "bloodscalp ears", "the stone of the tides", "supply and demand"],
                "type": "hub"
             },
@@ -6788,6 +6788,7 @@
                "align": "top",
                "header": "eastern shipwreck",
                "objectives": ["deep sea salvage"],
+               "special": [["step by step guide", "https://imgur.com/a/zlY79e5"]],
                "type": "objective"
             },
             {
@@ -6807,6 +6808,7 @@
                "align": "top",
                "header": "western shipwreck",
                "objectives": ["deep sea salvage"],
+               "special": [["step by step guide", "https://imgur.com/a/zlY79e5"]],
                "type": "objective"
             },
             {

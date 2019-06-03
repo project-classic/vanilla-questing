@@ -6,10 +6,11 @@ import { key_listener } from '../funcs/browsing';
 
 import '../interface/css/innerbody.scss';
 
+import Message from '../components/message';
 import Map from '../components/map';
 import Panel from '../components/panel';
 
-function Home({ location }) {
+function Home() {
    
    // GLOBAL CONTEXT
    const { state, dispatch } = useContext(Context);
@@ -22,26 +23,25 @@ function Home({ location }) {
    // IF DATA HAS BEN LOADED
    if (state.data !== null) {
       return (
-         <>
+         <div id={ 'innerbody' }>
             <EventListener
                target={ document }
                onKeyDown={ key_event }
             />
-            <div id={ 'innerbody' }>
-               <div className={ 'inner' }>
-                  <div id={ 'map-wrapper' }>
-                     <Map />
-                  </div>
-                  <div id={ 'panel-wrapper' }>
-                     <Panel />
-                  </div>
+            <Message />
+            <div className={ 'inner' }>
+               <div id={ 'map-wrapper' }>
+                  <Map />
+               </div>
+               <div id={ 'panel-wrapper' }>
+                  <Panel />
                </div>
             </div>
-         </>
+         </div>
       )
    
-   // OTHERWISE, SHOW LOADING SCREEN
-   } else { return <div>Loading...</div> }
+   // OTHERWISE, RETURN NOTHING
+   } else { return null; }
 }
 
 export default Home;

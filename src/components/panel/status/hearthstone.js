@@ -14,16 +14,16 @@ function Hearthstone() {
    // FIND LATEST HEARTHSTONE LOCATION
    useEffect(() => {
 
-      // FILTER OUT FUTURE HEARTHSTONE LOCATIONS
+      // FILTER OUT RELEVANT HEARTHSTONE LOCATIONS
       const filtered = state.data.hearthstones.filter(id => id.block < state.current);
-      let value;
+      let value = 'none';
 
-      if (filtered.length === 0) {
-         value = 'none';
-      } else {
+      // IF THERES LOCATIONS FOUND, FETCH THE MOST RECENT ONE
+      if (filtered.length !== 0) {
          value = filtered[filtered.length - 1].zone;
       }
 
+      // UPDATE LOCAL STATE ACCORDINGLY
       set_local({
          location: value
       })
