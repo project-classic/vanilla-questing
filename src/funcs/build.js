@@ -1,16 +1,16 @@
-// ALLIANCE
-import human from '../routes/alliance/human.json';
-import gnorf from '../routes/alliance/gnorf.json';
-import nelf from '../routes/alliance/nelf.json';
-import alliance_shared from '../routes/alliance/shared.json';
-import alliance_quests from '../routes/alliance/quests.json';
+// ALLIANCE ROUTES
+import human from '../resources/routes/alliance/human.json';
+import gnorf from '../resources/routes/alliance/gnorf.json';
+import nelf from '../resources/routes/alliance/nelf.json';
+import alliance_shared from '../resources/routes/alliance/shared.json';
+import alliance_quests from '../resources/routes/alliance/quests.json';
 
-// HORDE
-import trorc from '../routes/horde/trorc.json';
-import tauren from '../routes/horde/tauren.json';
-import undead from '../routes/horde/undead.json';
-import horde_shared from '../routes/horde/shared.json';
-import horde_quests from '../routes/horde/quests.json';
+// HORDE ROUTES
+import trorc from '../resources/routes/horde/trorc.json';
+import tauren from '../resources/routes/horde/tauren.json';
+import undead from '../resources/routes/horde/undead.json';
+import horde_shared from '../resources/routes/horde/shared.json';
+import horde_quests from '../resources/routes/horde/quests.json';
 
 // DEVELOPMENT
 import dev_route from '../routes/dev/route.json';
