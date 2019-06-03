@@ -13,8 +13,10 @@ import horde_shared from '../resources/routes/horde/shared.json';
 import horde_quests from '../resources/routes/horde/quests.json';
 
 // DEVELOPMENT
-import dev_route from '../routes/dev/route.json';
-import dev_quests from '../routes/dev/quests.json';
+import dev_route from '../resources/routes/dev/route.json';
+import dev_quests from '../resources/routes/dev/quests.json';
+
+import some_shit from '../resources/quests.json';
 
 // RACE SPECIFIC STARTERS
 const races = {
@@ -51,7 +53,7 @@ function route(race) {
    // GENERATE HORDE BUILD
    } else if (races.horde.has(race)) {
       content = {
-         quests: horde_quests,
+         quests: some_shit,
          route: [
             ...races.horde.get(race).path,
             ...horde_shared.path

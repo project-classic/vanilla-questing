@@ -27,9 +27,21 @@ function Quest({ quest, quests }) {
    )
 }
 
+function test(quest, quests) {
+   for (var key in quests) {
+      // console.log(quests[key])
+      if (quests[key]["name"].toString().toLowerCase() === quest.toString().toLowerCase()) {
+         console.log(key)
+         return key
+      }
+   }
+
+   return '0'
+}
+
 // DEFAULT BLOCK
 function Single({ quests, header }) { return (
-   <div><a href={ 'https://classicdb.ch/?quest=' + quests[header.toString().toLowerCase()] } target='_blank' rel='noopener noreferrer'>
+   <div><a href={ 'https://classicdb.ch/?quest=' + test(header, quests) } target='_blank' rel='noopener noreferrer'>
       { shorten(header) }
    </a></div>
 )}
@@ -37,7 +49,7 @@ function Single({ quests, header }) { return (
 // MULTI HEADER BLOCK
 function Multi({ quests, header, tag }) { return (
    <div className="split">
-      <div><a href={ 'https://classicdb.ch/?quest=' + quests[header.toString().toLowerCase()] } target='_blank' rel='noopener noreferrer'>
+      <div><a href={ 'https://classicdb.ch/?quest=' + test(header, quests) } target='_blank' rel='noopener noreferrer'>
          { shorten(header) }
       </a></div>
       <div>{ tag }</div>

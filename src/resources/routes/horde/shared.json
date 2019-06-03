@@ -6325,6 +6325,7 @@
                "align": "top",
                "header": "eastern shipwreck",
                "objectives": ["deep sea salvage"],
+               "special": [["step by step guide", "https://imgur.com/a/zlY79e5"]],
                "type": "objective"
             },
             {
@@ -6344,6 +6345,7 @@
                "align": "top",
                "header": "western shipwreck",
                "objectives": ["deep sea salvage"],
+               "special": [["step by step guide", "https://imgur.com/a/zlY79e5"]],
                "type": "objective"
             },
             {
