@@ -130,7 +130,7 @@ function custom({ build, faction }) {
 function dev() {
    return {
       data: {
-         quests: dev_quests,
+         quests: some_shit,
          route: dev_route.path,
          hearthstones: hearthstones(dev_route.path)
       },

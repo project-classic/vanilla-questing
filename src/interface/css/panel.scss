@@ -127,18 +127,18 @@
             div:last-child { text-align: right; }
          }
 
-         .title, .ends, .starts, .objectives, .special, .quest, .completed {
+         .title, .complete, .accept, .quest, .note, .quest, .completed {
             background: rgba(255, 255, 255, 0.130);
             margin-top: 1px;
             padding: 5px 7px;
             color: #F1F1F1;
          }
          
-         .ends { background: rgba(94, 207, 94, 0.342); }
-         .starts { background: rgba(255, 255, 29, 0.37); }
-         .objectives { background: rgba(226, 84, 84, 0.418); }
-         .special { background: rgba(94, 125, 192, 0.507); }
-         .quest { background: rgba(226, 171, 108, 0.486); }
+         .complete { background: rgba(94, 207, 94, 0.342); }
+         .accept { background: rgba(255, 255, 29, 0.37); }
+         .quest { background: rgba(226, 84, 84, 0.418); }
+         .note { background: rgba(94, 125, 192, 0.507); }
+         // .quest { background: rgba(226, 171, 108, 0.486); }
          .completed { background: rgba(179, 85, 216, 0.507); }
 
          .special a {
